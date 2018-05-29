@@ -2,8 +2,8 @@ package v1
 
 import (
 	"github.com/labstack/echo"
-	"github.com/shiguanghuxian/face-login/faceserver/v1/public"
-	"github.com/shiguanghuxian/face-login/faceserver/v1/user"
+	"github.com/nEdAy/face-login/faceserver/v1/public"
+	"github.com/nEdAy/face-login/faceserver/v1/user"
 )
 
 // Route v1版本的路由文件

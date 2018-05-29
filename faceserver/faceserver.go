@@ -10,10 +10,10 @@ import (
 	"github.com/google/logger"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/shiguanghuxian/face-login/internal/common"
-	"github.com/shiguanghuxian/face-login/internal/config"
-	"github.com/shiguanghuxian/face-login/internal/context"
-	"github.com/shiguanghuxian/face-login/internal/db"
+	"github.com/nEdAy/face-login/internal/common"
+	"github.com/nEdAy/face-login/internal/config"
+	"github.com/nEdAy/face-login/internal/context"
+	"github.com/nEdAy/face-login/internal/db"
 )
 
 // FaceServer 程序服务对象

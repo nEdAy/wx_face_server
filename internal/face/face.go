@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	sdk "github.com/shiguanghuxian/face-golang-sdk"
-	"github.com/shiguanghuxian/face-login/internal/config"
+	"github.com/nEdAy/face-login/internal/config"
 )
 
 /* 人脸识别相关处理函数 */

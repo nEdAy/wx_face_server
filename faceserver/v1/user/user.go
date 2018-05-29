@@ -11,12 +11,12 @@ import (
 
 	"github.com/labstack/echo"
 	uuid "github.com/satori/go.uuid"
-	"github.com/shiguanghuxian/face-login/internal/common"
-	"github.com/shiguanghuxian/face-login/internal/config"
-	"github.com/shiguanghuxian/face-login/internal/db"
-	"github.com/shiguanghuxian/face-login/internal/face"
-	"github.com/shiguanghuxian/face-login/model"
-	"github.com/shiguanghuxian/logger"
+	"github.com/nEdAy/face-login/internal/common"
+	"github.com/nEdAy/face-login/internal/config"
+	"github.com/nEdAy/face-login/internal/db"
+	"github.com/nEdAy/face-login/internal/face"
+	"github.com/nEdAy/face-login/model"
+	"github.com/google/logger"
 )
 
 // var (

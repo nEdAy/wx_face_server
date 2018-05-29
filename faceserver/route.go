@@ -1,7 +1,7 @@
 package faceserver
 
 import (
-	"github.com/shiguanghuxian/face-login/faceserver/v1"
+	"github.com/nEdAy/face-login/faceserver/v1"
 )
 
 // Route 根路由

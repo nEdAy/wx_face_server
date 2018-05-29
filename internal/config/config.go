@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/naoina/toml"
-	"github.com/shiguanghuxian/face-login/internal/common"
+	"github.com/nEdAy/face-login/internal/common"
 )
 
 var CFG *Config

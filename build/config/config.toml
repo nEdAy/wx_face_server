@@ -4,12 +4,12 @@
 debug = true
 
 ## face++ api key
-api_key = ""
-api_secret = ""
-faceset_token = "" ## 一个faceset token，用于存储用户头像
+api_key = "TfWdOhNsJf-hGliDYm162MgSXRwjGzKn"
+api_secret = "RVBQ-umKDXMhErnQOppOjaBuBmbvyhck"
+faceset_token = "283a222c63aa74d6bf8efee560f38642" ## 一个faceset token，用于存储用户头像
 
 ## 人脸识别类型
-face_type = "seeta" # face++ | seeta
+face_type = "face++" # face++ | seeta
 
 ## 当face_type = "seeta"时的cmd命令位置,face所在目录
 cmd = "/Users/zuo/Documents/c++/SeetaFaceEngine/face/build/"
@@ -25,7 +25,7 @@ port = 8088
 ## 是否调试模式
 debug = true
 ## 数据库连接地址
-address = "127.0.0.1"
+address = "150.109.70.242"
 ## 数据库端口
 port = 3306
 ## 连接池最大连接数
@@ -35,10 +35,10 @@ max_open_conns = 24
 ## 数据库用户名
 user = "root"
 ## 数据库密码
-passwd = "123456"
+passwd = "abcd1234"
 ## 数据库名
 db_name = "face"
 ## 数据库表前缀
-prefix = "vivi_"
+prefix = ""
 ## 定时保活定
 ping_interval = "30s"

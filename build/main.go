@@ -15,8 +15,8 @@ import (
 
 	"github.com/google/logger"
 	"github.com/kardianos/service"
-	"github.com/shiguanghuxian/face-login/faceserver"
-	"github.com/shiguanghuxian/face-login/internal/common"
+	"github.com/nEdAy/face-login/faceserver"
+	"github.com/nEdAy/face-login/internal/common"
 )
 
 // 程序版本

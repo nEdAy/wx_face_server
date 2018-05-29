@@ -10,10 +10,10 @@ import (
 	"sync"
 
 	sh "github.com/codeskyblue/go-sh"
-	"github.com/shiguanghuxian/face-login/internal/common"
-	"github.com/shiguanghuxian/face-login/internal/config"
-	"github.com/shiguanghuxian/face-login/internal/db"
-	"github.com/shiguanghuxian/face-login/model"
+	"github.com/nEdAy/face-login/internal/common"
+	"github.com/nEdAy/face-login/internal/config"
+	"github.com/nEdAy/face-login/internal/db"
+	"github.com/nEdAy/face-login/model"
 )
 
 /* 本地人脸识别操作函数 */

@@ -8,7 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/logger"
 	"github.com/jinzhu/gorm"
-	"github.com/shiguanghuxian/face-login/internal/config"
+	"github.com/nEdAy/face-login/internal/config"
 )
 
 // 数据库操作对象
