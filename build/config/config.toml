@@ -17,7 +17,7 @@ cmd = "/Users/zuo/Documents/c++/SeetaFaceEngine/face/build/"
 ## http 监听
 [http]
 address = ""
-port = 8088
+port = 443
 
 
 ## mysql 配置

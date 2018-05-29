@@ -37,7 +37,7 @@ func (hc *HTTPConfig) Init() {
 		hc.Address = "0.0.0.0"
 	}
 	if hc.Port == 0 {
-		hc.Port = 8080
+		hc.Port = 443
 	}
 }
 

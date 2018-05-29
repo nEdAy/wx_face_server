@@ -3,7 +3,7 @@ package face
 import (
 	"errors"
 
-	sdk "github.com/shiguanghuxian/face-golang-sdk"
+	sdk "github.com/nEdAy/face-golang-sdk"
 	"github.com/nEdAy/face-login/internal/config"
 )
 
