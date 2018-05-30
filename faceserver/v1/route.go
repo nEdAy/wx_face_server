@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/nEdAy/face-login/faceserver/v1/public"
 	"github.com/nEdAy/face-login/faceserver/v1/user"
+	"github.com/nEdAy/face-login/faceserver/v1/cos"
 )
 
 // Route v1版本的路由文件
@@ -11,6 +12,10 @@ func Route(g *echo.Group) {
 	/* 公共访问接口 */
 	publicC := new(public.PublicController)
 	g.POST("/login", publicC.Login)
+
+	/* Cos访问接口 */
+	CosC := new(cos.CosController)
+	g.GET("/newAuthorization", CosC.NewAuthorization)
 
 	/* 用户管理 */
 	userC := new(user.UserController)

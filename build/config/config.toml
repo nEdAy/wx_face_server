@@ -4,8 +4,8 @@
 debug = true
 
 ## face++ api key
-api_key = "TfWdOhNsJf-hGliDYm162MgSXRwjGzKn"
-api_secret = "RVBQ-umKDXMhErnQOppOjaBuBmbvyhck"
+api_key = "JskefB-VqnmpG9LAV3uNHR6Snlhvuo3x"
+api_secret = "YciD91jbU2Qtl9JQ5RK53YMdOxObBIBA"
 faceset_token = "283a222c63aa74d6bf8efee560f38642" ## 一个faceset token，用于存储用户头像
 
 ## 人脸识别类型

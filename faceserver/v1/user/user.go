@@ -20,8 +20,8 @@ import (
 )
 
 // var (
-// 	APIKey    = "HiVoOzKxm9kRLcKG2ZaJS1I0414P2TJ5"
-// 	APISecret = "RgGYzg3g4iuyw4B4t2z2pTvobj7KYHhl"
+// 	APIKey    = "JskefB-VqnmpG9LAV3uNHR6Snlhvuo3x"
+// 	APISecret = "YciD91jbU2Qtl9JQ5RK53YMdOxObBIBA"
 // )
 
 // UserController 用户管理，即FaceSet管理
