@@ -77,7 +77,6 @@ func (uc *UserController) AddUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "图片地址不能为空")
 	}
 	user.FaceUrl = savePath
-	user.FaceToken = ""
 	// 如果未添加到数据库，则删除图片
 	defer func() {
 		log.Println(user.Id)
@@ -92,12 +91,12 @@ func (uc *UserController) AddUser(c echo.Context) error {
 	var faceToken string
 
 	faceCount, faceToken, err = face.GetSeetaFaceCount(savePath)
-
+	face.getFaceCount();
 /*	if config.CFG.FaceType == "face++" {
 		faceCount, faceToken, err = face.GetFaceFaceCount(picPath)
 	} else if config.CFG.FaceType == "seeta" {
 		faceCount, faceToken, err = face.GetSeetaFaceCount(picPath)
-	} else if config.CFG.FaceType == "face_recognition" {
+	} else if config.CFG.FaceType == "face" {
 		faceCount, faceToken, err = face.GetSeetaFaceCount(picPath)
 	} else {
 		return c.JSON(http.StatusBadRequest, "服务端未配置人脸检测方式")

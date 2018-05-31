@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package face_recognition;
+
+service FaceRecognition {
+    rpc GetFaceCount (GetFaceCountRequest) returns (GetFaceCountReply) {
+    }
+    rpc IsMatchFace (IsMatchFaceRequest) returns (IsMatchFaceReply) {
+    }
+}
+
+message GetFaceCountRequest {
+    string prefixCosUrl = 1;
+    string fileName = 2;
+}
+
+message GetFaceCountReply {
+    string count = 1;
+    string unknown_face_encodings = 2;
+}
+
+
+message IsMatchFaceRequest {
+    string prefixCosUrl = 1;
+    string fileName = 2;
+    string knownFaceEncoding = 3;
+}
+
+message IsMatchFaceReply {
+    bool isMatchFace = 1;
+}
