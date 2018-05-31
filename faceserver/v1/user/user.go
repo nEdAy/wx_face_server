@@ -2,15 +2,12 @@ package user
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/labstack/echo"
-	uuid "github.com/satori/go.uuid"
 	"github.com/nEdAy/face-login/internal/common"
 	"github.com/nEdAy/face-login/internal/config"
 	"github.com/nEdAy/face-login/internal/db"
@@ -37,44 +34,48 @@ func (uc *UserController) AddUser(c echo.Context) error {
 	}
 	user.Password = common.UserPwdEncrypt(c.FormValue("password"))
 
-	// 根据字段名获取表单文件
-	formFile, header, err := c.Request().FormFile("file")
-	if err != nil {
-		logger.Errorln(err)
-		return c.JSON(http.StatusBadRequest, err.Error())
+	/*	// 根据字段名获取表单文件
+		formFile, header, err := c.Request().FormFile("file")
+		if err != nil {
+			logger.Errorln(err)
+			return c.JSON(http.StatusBadRequest, err.Error())
+		}
+		defer formFile.Close()
+
+		// 获取文件后缀
+		postfix := "png"
+		index := strings.LastIndex(header.Filename, ".")
+		if index > 0 {
+			postfix = header.Filename[index+1:]
+		}
+
+		// 拼接保存路径
+		pathSeparator := string(os.PathSeparator)
+		uuid, _ := uuid.NewV4()
+		fileName := uuid.String()
+		savePath := fmt.Sprintf("%sfaces%s%s.%s", pathSeparator, pathSeparator, fileName, postfix)
+		picPath := fmt.Sprintf("%s%spublic%s", common.GetRootDir(), pathSeparator, savePath)
+		// 创建保存文件
+		destFile, err := os.Create(picPath)
+		if err != nil {
+			logger.Errorln(err)
+			return c.JSON(http.StatusBadRequest, err.Error())
+		}
+		defer destFile.Close()
+
+		// log.Println(picPath)
+
+		// 读取表单文件，写入保存文件
+		_, err = io.Copy(destFile, formFile)
+		if err != nil {
+			logger.Errorln(err)
+			return c.JSON(http.StatusBadRequest, err.Error())
+		}
+	*/
+	savePath := c.FormValue("src")
+	if savePath == "" {
+		return c.JSON(http.StatusBadRequest, "图片地址不能为空")
 	}
-	defer formFile.Close()
-
-	// 获取文件后缀
-	postfix := "png"
-	index := strings.LastIndex(header.Filename, ".")
-	if index > 0 {
-		postfix = header.Filename[index+1:]
-	}
-
-	// 拼接保存路径
-	pathSeparator := string(os.PathSeparator)
-	uuid, _ := uuid.NewV4()
-	fileName := uuid.String()
-	savePath := fmt.Sprintf("%sfaces%s%s.%s", pathSeparator, pathSeparator, fileName, postfix)
-	picPath := fmt.Sprintf("%s%spublic%s", common.GetRootDir(), pathSeparator, savePath)
-	// 创建保存文件
-	destFile, err := os.Create(picPath)
-	if err != nil {
-		logger.Errorln(err)
-		return c.JSON(http.StatusBadRequest, err.Error())
-	}
-	defer destFile.Close()
-
-	// log.Println(picPath)
-
-	// 读取表单文件，写入保存文件
-	_, err = io.Copy(destFile, formFile)
-	if err != nil {
-		logger.Errorln(err)
-		return c.JSON(http.StatusBadRequest, err.Error())
-	}
-
 	user.FaceUrl = savePath
 	user.FaceToken = ""
 	// 如果未添加到数据库，则删除图片
@@ -85,16 +86,22 @@ func (uc *UserController) AddUser(c echo.Context) error {
 		// }
 	}()
 
+	var err error
 	// 获取人脸数
-	var faceCount int = 0
-	var faceToken string = ""
-	if config.CFG.FaceType == "face++" {
+	var faceCount int
+	var faceToken string
+
+	faceCount, faceToken, err = face.GetSeetaFaceCount(savePath)
+
+/*	if config.CFG.FaceType == "face++" {
 		faceCount, faceToken, err = face.GetFaceFaceCount(picPath)
 	} else if config.CFG.FaceType == "seeta" {
 		faceCount, faceToken, err = face.GetSeetaFaceCount(picPath)
+	} else if config.CFG.FaceType == "face_recognition" {
+		faceCount, faceToken, err = face.GetSeetaFaceCount(picPath)
 	} else {
 		return c.JSON(http.StatusBadRequest, "服务端未配置人脸检测方式")
-	}
+	}*/
 
 	if err != nil {
 		logger.Errorln(err)

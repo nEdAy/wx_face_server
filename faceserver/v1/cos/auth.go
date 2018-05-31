@@ -217,7 +217,7 @@ type AuthorizationTransport struct {
 }
 
 // RoundTrip implements the RoundTripper interface.
-func (t *AuthorizationTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+/*func (t *AuthorizationTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	req = cloneRequest(req) // per RoundTrip contract
 	if t.Expire == time.Duration(0) {
 		t.Expire = defaultAuthExpire
@@ -229,7 +229,7 @@ func (t *AuthorizationTransport) RoundTrip(req *http.Request) (*http.Response, e
 
 	resp, err := t.transport().RoundTrip(req)
 	return resp, err
-}
+}*/
 
 func (t *AuthorizationTransport) transport() http.RoundTripper {
 	if t.Transport != nil {
