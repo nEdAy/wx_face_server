@@ -12,7 +12,7 @@ const (
 	address = "localhost:50052"
 )
 
-func GetFaceCount(prefixCosUrl string, fileName string) (int32, string, error) {
+func GetFaceCount(prefixCosUrl string, fileName string, faceToken string) (int32, error) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
@@ -23,15 +23,15 @@ func GetFaceCount(prefixCosUrl string, fileName string) (int32, string, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	r, err := c.GetFaceCount(ctx, &pb.GetFaceCountRequest{PrefixCosUrl: prefixCosUrl, FileName: fileName})
+	r, err := c.GetFaceCount(ctx, &pb.GetFaceCountRequest{PrefixCosUrl: prefixCosUrl, FileName: fileName, FaceToken: faceToken})
 	if err != nil {
 		log.Fatalf("could not Count: %v", err)
 	}
 	log.Printf("Count: %d", r.Count)
-	return r.Count, r.UnknownFaceEncodings, err
+	return r.Count, err
 }
 
-func IsMatchFace(prefixCosUrl string, fileName string, knownFaceEncoding string) (bool, error) {
+func IsMatchFace(prefixCosUrl string, fileName string, faceToken string) (bool, error) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
@@ -42,7 +42,7 @@ func IsMatchFace(prefixCosUrl string, fileName string, knownFaceEncoding string)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	r, err := c.IsMatchFace(ctx, &pb.IsMatchFaceRequest{PrefixCosUrl: prefixCosUrl, FileName: fileName, KnownFaceEncoding: knownFaceEncoding})
+	r, err := c.IsMatchFace(ctx, &pb.IsMatchFaceRequest{PrefixCosUrl: prefixCosUrl, FileName: fileName, FaceToken: faceToken})
 	if err != nil {
 		log.Fatalf("could not IsMatchFace: %v", err)
 	}

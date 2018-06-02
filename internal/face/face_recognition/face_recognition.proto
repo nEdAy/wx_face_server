@@ -12,18 +12,18 @@ service FaceRecognition {
 message GetFaceCountRequest {
     string prefixCosUrl = 1;
     string fileName = 2;
+    string faceToken = 3;
 }
 
 message GetFaceCountReply {
     int32 count = 1;
-    string unknown_face_encodings = 2;
 }
 
 
 message IsMatchFaceRequest {
     string prefixCosUrl = 1;
     string fileName = 2;
-    string knownFaceEncoding = 3;
+    string faceToken = 3;
 }
 
 message IsMatchFaceReply {

@@ -32,7 +32,7 @@ func GetSha1String(s string) string {
 
 // UserPwdEncrypt 加密密码明文
 func UserPwdEncrypt(password string, salts ...string) string {
-	salt := "vivi_"
+	salt := "nEdAy_"
 	if len(salts) > 0 {
 		salt = salts[0]
 	}

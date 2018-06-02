@@ -55,7 +55,8 @@ func (uc *UserController) AddUser(c echo.Context) error {
 		// }
 	}()
 
-	faceCount, faceToken, err := face.GetFaceCount(prefixCosUrl, fileName)
+	user.FaceToken = common.UserPwdEncrypt(user.Username)
+	faceCount, err := face.GetFaceCount(prefixCosUrl, fileName, user.FaceToken)
 
 	if err != nil {
 		logger.Errorln(err)
@@ -68,7 +69,6 @@ func (uc *UserController) AddUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "请保证人脸照片中只包含一个人脸")
 	}
 
-	user.FaceToken = faceToken
 	user.CreateTime = time.Now().Unix()
 
 	// 查询用户信息
