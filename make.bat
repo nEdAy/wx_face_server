@@ -34,7 +34,7 @@ goto :eof
 :build
 for /f "delims=" %%i in ('go version') do (set go_version=%%i)
 for /f "delims=" %%i in ('git rev-parse HEAD') do (set git_hash=%%i)
-@go build -ldflags "-X main.VERSION=1.0.0 -X 'main.BUILD_TIME=%DATE% %TIME%' -X 'main.GO_VERSION=%go_version%' -X main.GIT_HASH=%git_hash%" -o ./build/faceserver.exe ./
+@go build -ldflags "-X main.VERSION=1.0.0 -X 'main.BUILD_TIME=%DATE% %TIME%' -X 'main.GO_VERSION=%go_version%' -X main.GIT_HASH=%git_hash%" -o ./build/face_server.exe ./
 exit /B %ERRORLEVEL%
 
 :linux_build
@@ -43,7 +43,7 @@ for /f "delims=" %%i in ('git rev-parse HEAD') do (set git_hash=%%i)
 SET CGO_ENABLED=0
 set GOARCH=amd64
 set GOOS=linux
-@go build -ldflags "-X main.VERSION=1.0.0 -X 'main.BUILD_TIME=%DATE% %TIME%' -X 'main.GO_VERSION=%go_version%' -X main.GIT_HASH=%git_hash%" -o ./build/faceserver ./
+@go build -ldflags "-X main.VERSION=1.0.0 -X 'main.BUILD_TIME=%DATE% %TIME%' -X 'main.GO_VERSION=%go_version%' -X main.GIT_HASH=%git_hash%" -o ./build/face_server ./
 exit /B %ERRORLEVEL%
 
 :darwin_build
@@ -52,11 +52,11 @@ for /f "delims=" %%i in ('git rev-parse HEAD') do (set git_hash=%%i)
 SET CGO_ENABLED=0
 set GOARCH=amd64
 set GOOS=darwin
-@go build -ldflags "-X main.VERSION=1.0.0 -X 'main.BUILD_TIME=%DATE% %TIME%' -X 'main.GO_VERSION=%go_version%' -X main.GIT_HASH=%git_hash%" -o ./build/faceserver ./
+@go build -ldflags "-X main.VERSION=1.0.0 -X 'main.BUILD_TIME=%DATE% %TIME%' -X 'main.GO_VERSION=%go_version%' -X main.GIT_HASH=%git_hash%" -o ./build/face_server ./
 exit /B %ERRORLEVEL%
 
 :clean
-@del /S /F /Q "build\faceserver*"
+@del /S /F /Q "build\face_server*"
 @del /S /F /Q "build\logs\*.log"
 exit /B 0
 
