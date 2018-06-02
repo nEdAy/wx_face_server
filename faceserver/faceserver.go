@@ -70,7 +70,7 @@ func (fs *FaceServer) Run() {
 	// 启动服务
 	address := fmt.Sprintf("%s:%d", fs.cfg.Http.Address, fs.cfg.Http.Port)
 	// err := fs.e.Start(address)
-	err := fs.e.StartTLS(address, "ssl/www.neday.cn_bundle.cer", "ssl/www.neday.cn.key")
+	err := fs.e.StartTLS(address, common.GetRootDir()+"/ssl/www.neday.cn_bundle.cer", common.GetRootDir()+"/ssl/www.neday.cn.key")
 	if err != nil {
 		fs.e.Logger.Fatal(err)
 	}
