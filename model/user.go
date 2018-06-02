@@ -9,7 +9,6 @@ type UserModel struct {
 	Password     string `gorm:"column:password" json:"password"`
 	FaceToken    string `gorm:"column:face_token" json:"face_token"`
 	FaceUrl      string `gorm:"column:face_url" json:"face_url"`
-	FacesetToken string `gorm:"column:faceset_token" json:"faceset_token"`
 	CreateTime   int64  `gorm:"column:create_time" json:"create_time"`
 }
 

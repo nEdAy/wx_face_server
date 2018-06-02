@@ -1,90 +1,81 @@
 package public
 
 import (
-	"fmt"
-	"io"
 	"net/http"
-	"os"
-	"strings"
-
 	"github.com/google/logger"
 	"github.com/labstack/echo"
-	uuid "github.com/satori/go.uuid"
-	"github.com/nEdAy/face-login/internal/common"
-	"github.com/nEdAy/face-login/internal/config"
 	"github.com/nEdAy/face-login/internal/db"
-	"github.com/nEdAy/face-login/internal/face"
 	"github.com/nEdAy/face-login/model"
+	"log"
+	"github.com/nEdAy/face-login/internal/face"
 )
 
 // PublicController 公共可访问接口
 type PublicController struct {
 }
 
+type LoginUserModel struct {
+	Username     string `json:"username"`
+	PrefixCosUrl string `json:"prefixCosUrl"`
+	FileName     string `json:"fileName"`
+}
+
 // Login 登录
 func (pc *PublicController) Login(c echo.Context) error {
-	// 根据字段名获取表单文件
-	formFile, header, err := c.Request().FormFile("file")
-	if err != nil {
-		logger.Errorln(err)
-		return c.JSON(http.StatusBadRequest, err.Error())
+	loginUserModel := new(LoginUserModel)
+	if err := c.Bind(loginUserModel); err != nil {
+		return c.JSON(http.StatusBadRequest, "参数格式错误")
 	}
-	defer formFile.Close()
+	user := new(model.UserModel)
+	user.Username = loginUserModel.Username
+	if user.Username == "" {
+		return c.JSON(http.StatusBadRequest, "用户名不能为空")
+	}
+	prefixCosUrl := loginUserModel.PrefixCosUrl
+	if prefixCosUrl == "" {
+		return c.JSON(http.StatusBadRequest, "图片地址不能为空")
+	}
+	fileName := loginUserModel.FileName
+	if fileName == "" {
+		return c.JSON(http.StatusBadRequest, "图片地址不能为空")
+	}
+	user.FaceUrl = prefixCosUrl + fileName
 
-	// 获取文件后缀
-	postfix := "png"
-	index := strings.LastIndex(header.Filename, ".")
-	if index > 0 {
-		postfix = header.Filename[index+1:]
-	}
-
-	// 拼接保存路径
-	pathSeparator := string(os.PathSeparator)
-	uuid, _ := uuid.NewV4()
-	fileName := uuid.String()
-	savePath := fmt.Sprintf("%scache%s%s.%s", pathSeparator, pathSeparator, fileName, postfix)
-	picPath := fmt.Sprintf("%s%spublic%s", common.GetRootDir(), pathSeparator, savePath)
-	// 创建保存文件
-	destFile, err := os.Create(picPath)
-	if err != nil {
-		logger.Errorln(err)
-		return c.JSON(http.StatusBadRequest, err.Error())
-	}
-	defer os.Remove(picPath)
-	defer destFile.Close()
-
-	// log.Println(picPath)
-
-	// 读取表单文件，写入保存文件
-	_, err = io.Copy(destFile, formFile)
-	if err != nil {
-		logger.Errorln(err)
-		return c.JSON(http.StatusBadRequest, err.Error())
-	}
-
-	// 验证用户脸部信息
-	var faceToken string
-	if config.CFG.FaceType == "face++" {
-		faceToken, err = face.SearchFaceFaceToken(picPath)
-	} else if config.CFG.FaceType == "seeta" {
-		faceToken, err = face.SearchSeetaFaceToken(picPath)
-	} else {
-		return c.JSON(http.StatusBadRequest, "服务端未配置人脸检测方式")
-	}
-	if err != nil {
-		logger.Errorln(err)
-		return c.JSON(http.StatusBadRequest, err.Error())
-	}
+	// 如果未添加到数据库，则删除图片
+	defer func() {
+		log.Println(user.Id)
+		// if user.FaceToken == "" || user.Id == 0 {
+		// 	os.Remove(picPath)
+		// }
+	}()
 
 	// 查询用户信息
-	user := new(model.UserModel)
-	err = db.DB.Where("face_token = ?", faceToken).Limit(1).Find(user).Error
+	findUser := new(model.UserModel)
+	err := db.DB.Where("username = ?", user.Username).Find(findUser).Limit(1).Error
 	if err != nil {
 		logger.Errorln(err)
+		if err.Error() == "record not found" {
+			return c.JSON(http.StatusBadRequest, "用户<"+user.Username+">不存在")
+		}
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	user.Password = ""
+	isMatchFace, err := face.IsMatchFace(prefixCosUrl, fileName, findUser.FaceToken)
+	if err != nil {
+		logger.Errorln(err)
+		/*		if faceCount == 0 {
+					return c.JSON(http.StatusBadRequest, "未检测到人脸信息")
+				}
+				if faceCount > 1 {
+					return c.JSON(http.StatusBadRequest, "请保证人脸照片中只包含一个人脸")
+				}*/
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
 
-	return c.JSON(http.StatusOK, user)
+	if !isMatchFace {
+		return c.JSON(http.StatusBadRequest, "拍摄照片中未检测到该用户人脸")
+	}
+	user.Password = ""
+	user.FaceToken = ""
+	return c.JSON(http.StatusOK, findUser)
 }

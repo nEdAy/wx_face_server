@@ -15,7 +15,7 @@ message GetFaceCountRequest {
 }
 
 message GetFaceCountReply {
-    string count = 1;
+    int32 count = 1;
     string unknown_face_encodings = 2;
 }
 
