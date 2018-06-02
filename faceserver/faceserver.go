@@ -34,7 +34,7 @@ func New() *FaceServer {
 	js, _ := json.Marshal(cfg)
 	log.Println(string(js))
 	// 初始化google/logger输出到文件
-	err = initLogger("faceserver", cfg.Debug)
+	err = initLogger("face_server", cfg.Debug)
 	if err != nil {
 		logger.Fatalln("日志初始化失败:", err)
 	}

@@ -34,7 +34,7 @@ func (p *program) Start(s service.Service) error {
 
 func (p *program) run() {
 	// 存储pid
-	err := common.WritePidToFile("faceserver")
+	err := common.WritePidToFile("face_server")
 	if err != nil {
 		log.Println("写pid文件错误")
 	}
@@ -45,7 +45,7 @@ func (p *program) run() {
 
 func (p *program) Stop(s service.Service) error {
 	// 删除pid文件
-	common.RemovePidFile("faceserver")
+	common.RemovePidFile("face_server")
 	// 停止服务
 	appServer.Stop()
 	// 停止任务，3秒后返回
@@ -58,8 +58,8 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	svcConfig := &service.Config{
-		Name:        "faceserver",
-		DisplayName: "faceserver",
+		Name:        "face_server",
+		DisplayName: "face_server",
 		Description: "面部识别登录系统服务端",
 	}
 	// 实例化
