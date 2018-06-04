@@ -38,14 +38,6 @@ func (pc *PublicController) Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "图片地址不能为空")
 	}
 
-	// 如果未添加到数据库，则删除图片
-	defer func() {
-		// log.Println(loginUserModel.Id)
-		// if user.FaceToken == "" || user.Id == 0 {
-		// 	os.Remove(picPath)
-		// }
-	}()
-
 	// 查询用户信息
 	findUser := new(model.UserModel)
 	err := db.DB.Where("username = ?", username).Find(findUser).Limit(1).Error
@@ -58,6 +50,7 @@ func (pc *PublicController) Login(c echo.Context) error {
 	}
 
 	isMatchFace, err := face.IsMatchFace(prefixCosUrl, fileName, findUser.FaceToken)
+
 	if err != nil {
 		logger.Errorln(err)
 		/*		if faceCount == 0 {

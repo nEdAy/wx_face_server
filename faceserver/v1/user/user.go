@@ -2,7 +2,6 @@ package user
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -47,13 +46,6 @@ func (uc *UserController) AddUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "图片地址不能为空")
 	}
 	user.FaceUrl = prefixCosUrl + fileName
-	// 如果未添加到数据库，则删除图片
-	defer func() {
-		log.Println(user.Id)
-		// if user.FaceToken == "" || user.Id == 0 {
-		// 	os.Remove(picPath)
-		// }
-	}()
 
 	user.FaceToken = common.UserPwdEncrypt(user.Username)
 	faceCount, err := face.GetFaceCount(prefixCosUrl, fileName, user.FaceToken)
@@ -61,6 +53,9 @@ func (uc *UserController) AddUser(c echo.Context) error {
 	if err != nil {
 		logger.Errorln(err)
 		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+	if faceCount == -1 {
+		return c.JSON(http.StatusBadRequest, "已存在该用户名的人脸信息")
 	}
 	if faceCount == 0 {
 		return c.JSON(http.StatusBadRequest, "未检测到人脸信息")
@@ -124,9 +119,12 @@ func (uc *UserController) DelUser(c echo.Context) error {
 		logger.Errorln(err)
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
+	//TODO: 删除cos上的图片
+
+	// 删除服务器上的图片
 	pathSeparator := string(os.PathSeparator)
-	picPath := fmt.Sprintf("%s%spublic%s", common.GetRootDir(), pathSeparator, user.FaceUrl)
-	os.Remove(picPath)
+	picPath := fmt.Sprintf("%s%s%s", "cache/faces", pathSeparator, user.FaceToken)
+	os.RemoveAll(picPath)
 
 	return c.JSON(http.StatusOK, "ok")
 }
