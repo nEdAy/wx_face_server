@@ -21,11 +21,12 @@ func GetFaceCount(prefixCosUrl string, fileName string, faceToken string) (int32
 	defer conn.Close()
 	c := pb.NewFaceRecognitionClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 	r, err := c.GetFaceCount(ctx, &pb.GetFaceCountRequest{PrefixCosUrl: prefixCosUrl, FileName: fileName, FaceToken: faceToken})
 	if err != nil {
 		log.Fatalf("could not Count: %v", err)
+		return -1, err
 	}
 	log.Printf("Count: %d", r.Count)
 	return r.Count, err
@@ -40,11 +41,12 @@ func IsMatchFace(prefixCosUrl string, fileName string, faceToken string) (bool, 
 	defer conn.Close()
 	c := pb.NewFaceRecognitionClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 	r, err := c.IsMatchFace(ctx, &pb.IsMatchFaceRequest{PrefixCosUrl: prefixCosUrl, FileName: fileName, FaceToken: faceToken})
 	if err != nil {
 		log.Fatalf("could not IsMatchFace: %v", err)
+		return false, err
 	}
 	log.Printf("IsMatchFace: %t", r.IsMatchFace)
 	return r.IsMatchFace, err

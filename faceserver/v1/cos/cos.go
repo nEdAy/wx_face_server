@@ -35,18 +35,18 @@ func (pc *CosController) NewAuthorization(c echo.Context) error {
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
-		return c.JSON(http.StatusBadRequest, "did not connect: " + err.Error())
+		return c.JSON(http.StatusBadRequest, "did not connect: "+err.Error())
 	}
 	defer conn.Close()
 	client := pb.NewWXCosAuthClient(conn)
 
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	r, err := client.GetAuthData(ctx, &pb.GetAuthDataRequest{Method: method,Pathname: pathname})
+	r, err := client.GetAuthData(ctx, &pb.GetAuthDataRequest{Method: method, Pathname: pathname})
 	if err != nil {
 		log.Fatalf("could not AuthData: %v", err)
-		return c.JSON(http.StatusBadRequest, "could not AuthData: "+ err.Error())
+		return c.JSON(http.StatusBadRequest, "could not AuthData: "+err.Error())
 	}
 	log.Printf("AuthData: %s", r.AuthData)
 

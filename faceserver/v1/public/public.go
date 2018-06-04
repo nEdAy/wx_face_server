@@ -6,7 +6,6 @@ import (
 	"github.com/labstack/echo"
 	"github.com/nEdAy/face-login/internal/db"
 	"github.com/nEdAy/face-login/model"
-	"log"
 	"github.com/nEdAy/face-login/internal/face"
 )
 
@@ -26,9 +25,8 @@ func (pc *PublicController) Login(c echo.Context) error {
 	if err := c.Bind(loginUserModel); err != nil {
 		return c.JSON(http.StatusBadRequest, "参数格式错误")
 	}
-	user := new(model.UserModel)
-	user.Username = loginUserModel.Username
-	if user.Username == "" {
+	username := loginUserModel.Username
+	if username == "" {
 		return c.JSON(http.StatusBadRequest, "用户名不能为空")
 	}
 	prefixCosUrl := loginUserModel.PrefixCosUrl
@@ -39,11 +37,10 @@ func (pc *PublicController) Login(c echo.Context) error {
 	if fileName == "" {
 		return c.JSON(http.StatusBadRequest, "图片地址不能为空")
 	}
-	user.FaceUrl = prefixCosUrl + fileName
 
 	// 如果未添加到数据库，则删除图片
 	defer func() {
-		log.Println(user.Id)
+		// log.Println(loginUserModel.Id)
 		// if user.FaceToken == "" || user.Id == 0 {
 		// 	os.Remove(picPath)
 		// }
@@ -51,11 +48,11 @@ func (pc *PublicController) Login(c echo.Context) error {
 
 	// 查询用户信息
 	findUser := new(model.UserModel)
-	err := db.DB.Where("username = ?", user.Username).Find(findUser).Limit(1).Error
+	err := db.DB.Where("username = ?", username).Find(findUser).Limit(1).Error
 	if err != nil {
 		logger.Errorln(err)
 		if err.Error() == "record not found" {
-			return c.JSON(http.StatusBadRequest, "用户<"+user.Username+">不存在")
+			return c.JSON(http.StatusBadRequest, "用户<"+username+">不存在")
 		}
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
@@ -75,7 +72,8 @@ func (pc *PublicController) Login(c echo.Context) error {
 	if !isMatchFace {
 		return c.JSON(http.StatusBadRequest, "拍摄照片中未检测到该用户人脸")
 	}
-	user.Password = ""
-	user.FaceToken = ""
+	findUser.Password = ""
+	findUser.FaceToken = ""
+
 	return c.JSON(http.StatusOK, findUser)
 }
