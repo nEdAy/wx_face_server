@@ -34,7 +34,7 @@ func (pc *CosController) NewAuthorization(c echo.Context) error {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		log.Printf("did not connect: %v", err)
 		return c.JSON(http.StatusBadRequest, "did not connect: "+err.Error())
 	}
 	defer conn.Close()
@@ -45,10 +45,9 @@ func (pc *CosController) NewAuthorization(c echo.Context) error {
 	defer cancel()
 	r, err := client.GetAuthData(ctx, &pb.GetAuthDataRequest{Method: method, Pathname: pathname})
 	if err != nil {
-		log.Fatalf("could not AuthData: %v", err)
+		log.Printf("could not AuthData: %v", err)
 		return c.JSON(http.StatusBadRequest, "could not AuthData: "+err.Error())
 	}
 	log.Printf("AuthData: %s", r.AuthData)
-
 	return c.String(http.StatusOK, r.AuthData)
 }
