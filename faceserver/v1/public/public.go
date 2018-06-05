@@ -14,7 +14,7 @@ type PublicController struct {
 }
 
 type LoginUserModel struct {
-	Username     string `json:"username"`
+	UserId     string `json:"userId"`
 	PrefixCosUrl string `json:"prefixCosUrl"`
 	FileName     string `json:"fileName"`
 }
@@ -25,9 +25,9 @@ func (pc *PublicController) Login(c echo.Context) error {
 	if err := c.Bind(loginUserModel); err != nil {
 		return c.JSON(http.StatusBadRequest, "参数格式错误")
 	}
-	username := loginUserModel.Username
-	if username == "" {
-		return c.JSON(http.StatusBadRequest, "用户名不能为空")
+	userId := loginUserModel.UserId
+	if userId == "" {
+		return c.JSON(http.StatusBadRequest, "用户Id不能为空")
 	}
 	prefixCosUrl := loginUserModel.PrefixCosUrl
 	if prefixCosUrl == "" {
@@ -40,11 +40,11 @@ func (pc *PublicController) Login(c echo.Context) error {
 
 	// 查询用户信息
 	findUser := new(model.UserModel)
-	err := db.DB.Where("username = ?", username).Find(findUser).Limit(1).Error
+	err := db.DB.Where("id = ?", userId).Find(findUser).Limit(1).Error
 	if err != nil {
 		logger.Errorln(err)
 		if err.Error() == "record not found" {
-			return c.JSON(http.StatusBadRequest, "用户<"+username+">不存在")
+			return c.JSON(http.StatusBadRequest, "ID为<"+userId+">的用户不存在")
 		}
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}

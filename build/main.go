@@ -1,9 +1,3 @@
-/*
- * @Author: 时光弧线
- * @Date: 2018-03-28 10:05:04
- * @Last Modified by: 时光弧线
- * @Last Modified time: 2018-03-28 11:07:58
- */
 package main
 
 import (
